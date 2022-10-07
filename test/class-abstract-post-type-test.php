@@ -35,7 +35,7 @@ class Abstract_Post_Type_Test extends TestCase {
 		$this->assertEquals( array( 'post', 'posts' ), $post_type->capability_nouns() );
 		$this->assertEmpty( $post_type->capabilities() );
 		$this->assertEquals( array( 'title', 'editor' ), $post_type->features() );
-		$this->assertEmpty( $post_type->taxonomies() );
+		$this->assertEmpty( $post_type->taxonomies()->getIterator() );
 		$this->assertTrue( $post_type->rewrites() );
 		$this->assertTrue( $post_type->query_parameter_name() );
 		$this->assertEmpty( $post_type->template_blocks() );

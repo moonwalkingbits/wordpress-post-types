@@ -2,10 +2,10 @@
 /**
  * Post Types: post type registry class
  *
- * @package Moonwalking_Bits\Post_Types
+ * @since 0.1.0
  * @author Martin Pettersson
  * @license GPL-2.0
- * @since 0.1.0
+ * @package Moonwalking_Bits\Post_Types
  */
 
 namespace Moonwalking_Bits\Post_Types;
@@ -96,7 +96,10 @@ class Post_Type_Registry {
 				'capability_type'       => $post_type->capability_nouns(),
 				'capabilities'          => $post_type->capabilities(),
 				'supports'              => $post_type->features(),
-				'taxonomies'            => $post_type->taxonomies(),
+				'taxonomies'            => array_map(
+					fn( $taxonomy ) => $taxonomy->key(),
+					iterator_to_array( $post_type->taxonomies() )
+				),
 				'rewrite'               => $post_type->rewrites(),
 				'query_var'             => $post_type->query_parameter_name(),
 				'template'              => $post_type->template_blocks(),
@@ -107,6 +110,15 @@ class Post_Type_Registry {
 
 		foreach ( array_diff( self::$available_features, $post_type->features() ) as $feature ) {
 			remove_post_type_support( $post_type->key(), $feature );
+		}
+
+		/**
+		 * Taxonomy instance.
+		 *
+		 * @var \Moonwalking_Bits\Post_Types\Abstract_Taxonomy $taxonomy
+		 */
+		foreach ( $post_type->taxonomies() as $taxonomy ) {
+			$this->register_taxonomy( $taxonomy, $post_type );
 		}
 
 		$this->post_types[] = $post_type;
@@ -132,5 +144,40 @@ class Post_Type_Registry {
 			);
 			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
+	}
+
+	/**
+	 * Registers a taxonomy for the given post type.
+	 *
+	 * @param \Moonwalking_Bits\Post_Types\Abstract_Taxonomy  $taxonomy Taxonomy instance.
+	 * @param \Moonwalking_Bits\Post_Types\Abstract_Post_Type $post_type Post type instance.
+	 */
+	private function register_taxonomy( Abstract_Taxonomy $taxonomy, Abstract_Post_Type $post_type ): void {
+		register_taxonomy(
+			$taxonomy->key(),
+			$post_type->key(),
+			array(
+				'labels'                => $taxonomy->labels(),
+				'description'           => $taxonomy->description(),
+				'public'                => $taxonomy->is_public(),
+				'publicly_queryable'    => $taxonomy->is_publicly_queryable(),
+				'hierarchical'          => $taxonomy->is_hierarchical(),
+				'show_ui'               => $taxonomy->is_showing_ui(),
+				'show_in_menu'          => $taxonomy->is_showing_in_menu(),
+				'show_in_nav_menus'     => $taxonomy->is_visible_in_nav_menus(),
+				'show_in_rest'          => $taxonomy->is_included_in_rest(),
+				'rest_base'             => $taxonomy->rest_base_path(),
+				'rest_namespace'        => $taxonomy->rest_namespace_path(),
+				'rest_controller_class' => $taxonomy->rest_controller_class_name(),
+				'show_tag_cloud'        => $taxonomy->is_showing_tag_cloud(),
+				'show_in_quick_edit'    => $taxonomy->is_showing_in_quick_edit(),
+				'show_admin_column'     => $taxonomy->is_showing_admin_column(),
+				'capabilities'          => $taxonomy->capabilities(),
+				'rewrite'               => $taxonomy->rewrite(),
+				'query_var'             => $taxonomy->query_parameter_name(),
+				'default_term'          => $taxonomy->default_term(),
+				'sort'                  => $taxonomy->is_sorted(),
+			)
+		);
 	}
 }

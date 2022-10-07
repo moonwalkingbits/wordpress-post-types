@@ -2,10 +2,10 @@
 /**
  * Post Types: Abstract post type class
  *
- * @package Moonwalking_Bits\Post_Types
+ * @since 0.1.0
  * @author Martin Pettersson
  * @license GPL-2.0
- * @since 0.1.0
+ * @package Moonwalking_Bits\Post_Types
  */
 
 namespace Moonwalking_Bits\Post_Types;
@@ -129,7 +129,7 @@ abstract class Abstract_Post_Type {
 	 * If false, posts of this type belonging to the user will *not* be trashed or
 	 * deleted.
 	 * If not set, posts are trashed if post type supports the 'author' feature.
-	 * Otherwise posts are not trashed or deleted.
+	 * Otherwise, posts are not trashed or deleted.
 	 *
 	 * @since 0.1.0
 	 * @var bool|null
@@ -253,14 +253,6 @@ abstract class Abstract_Post_Type {
 	);
 
 	/**
-	 * An array of taxonomy identifiers that will be registered for the post type.
-	 *
-	 * @since 0.1.0
-	 * @var string[]
-	 */
-	protected array $taxonomies = array();
-
-	/**
 	 * Triggers the handling of rewrites for this post type.
 	 *
 	 * To prevent rewrite, set to false. To specify rewrite rules, an array can be
@@ -268,13 +260,13 @@ abstract class Abstract_Post_Type {
 	 *
 	 * @since 0.1.0
 	 * @var array|bool {
-	 *     @type string $slug       Customize the permastruct slug.
-	 *     @type bool   $with_front Whether the permastruct should be prepended with {@see WP_Rewrite::$front}.
+	 * @type string $slug Customize the permastruct slug.
+	 * @type bool   $with_front Whether the permastruct should be prepended with {@see WP_Rewrite::$front}.
 	 *                              Default true.
-	 *     @type bool   $feeds      Whether the feed permastruct should be built for this post type. Default is value of
+	 * @type bool   $feeds Whether the feed permastruct should be built for this post type. Default is value of
 	 *                              {@see static::$has_archive}.
-	 *     @type bool   $pages      Whether the permastruct should provide for pagination. Default true.
-	 *     @type int    $ep_mask    Endpoint mask to assign. If not specified and permalink_epmask is set, inherits from
+	 * @type bool   $pages Whether the permastruct should provide for pagination. Default true.
+	 * @type int    $ep_mask Endpoint mask to assign. If not specified and permalink_epmask is set, inherits from
 	 *                              {@see $permalink_epmask}. If not specified and {@see $permalink_epmask} is not set,
 	 *                              defaults to {@see EP_PERMALINK}.
 	 * }
@@ -326,12 +318,21 @@ abstract class Abstract_Post_Type {
 	protected Meta_Box_Collection $meta_boxes;
 
 	/**
-	 * Creates a new meta box instance.
+	 * Registered taxonomies.
+	 *
+	 * @since 0.2.0
+	 * @var \Moonwalking_Bits\Post_Types\Taxonomy_Collection
+	 */
+	protected Taxonomy_Collection $taxonomies;
+
+	/**
+	 * Creates a new post type instance.
 	 *
 	 * @since 0.1.0
 	 */
 	public function __construct() {
 		$this->meta_boxes = new Meta_Box_Collection();
+		$this->taxonomies = new Taxonomy_Collection();
 	}
 
 	/**
@@ -555,17 +556,6 @@ abstract class Abstract_Post_Type {
 	}
 
 	/**
-	 * Returns an array of taxonomy identifiers that will be registered for the
-	 * post type.
-	 *
-	 * @since 0.1.0
-	 * @return string[]
-	 */
-	public function taxonomies(): array {
-		return $this->taxonomies;
-	}
-
-	/**
 	 * Returns the rewrites for this post type.
 	 *
 	 * @since 0.1.0
@@ -614,6 +604,16 @@ abstract class Abstract_Post_Type {
 	 */
 	public function meta_boxes(): Meta_Box_Collection {
 		return $this->meta_boxes;
+	}
+
+	/**
+	 * Returns registered post type taxonomies.
+	 *
+	 * @since 0.2.0
+	 * @return \Moonwalking_Bits\Post_Types\Taxonomy_Collection Registered post type taxonomies.
+	 */
+	public function taxonomies(): Taxonomy_Collection {
+		return $this->taxonomies;
 	}
 
 	/**
