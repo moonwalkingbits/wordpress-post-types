@@ -24,7 +24,7 @@ class Abstract_Post_Type_Test extends TestCase {
 		$this->assertFalse( $post_type->is_visible_in_admin_bar() );
 		$this->assertFalse( $post_type->is_included_in_rest() );
 		$this->assertFalse( $post_type->is_using_default_meta_capability_handling() );
-		$this->assertFalse( $post_type->is_exported() );
+		$this->assertFalse( $post_type->can_be_exported() );
 		$this->assertNull( $post_type->delete_with_user() );
 		$this->assertFalse( $post_type->archive() );
 		$this->assertFalse( $post_type->menu_location() );

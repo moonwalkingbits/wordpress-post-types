@@ -85,7 +85,7 @@ class Post_Type_Registry {
 				'show_in_admin_bar'     => $post_type->is_visible_in_admin_bar(),
 				'show_in_rest'          => $post_type->is_included_in_rest(),
 				'map_meta_cap'          => $post_type->is_using_default_meta_capability_handling(),
-				'can_export'            => $post_type->is_exported(),
+				'can_export'            => $post_type->can_be_exported(),
 				'delete_with_user'      => $post_type->delete_with_user(),
 				'has_archive'           => $post_type->archive(),
 				'show_in_menu'          => $post_type->menu_location(),

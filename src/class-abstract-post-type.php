@@ -450,7 +450,7 @@ abstract class Abstract_Post_Type {
 	 * @since 0.1.0
 	 * @return bool
 	 */
-	public function is_exported(): bool {
+	public function can_be_exported(): bool {
 		return $this->can_export;
 	}
 
