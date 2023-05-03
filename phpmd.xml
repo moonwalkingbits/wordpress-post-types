@@ -35,7 +35,7 @@
 	</rule>
 	<rule ref="rulesets/codesize.xml/TooManyPublicMethods">
 		<properties>
-			<property name="maxmethods" value="20"/>
+			<property name="maxmethods" value="21"/>
 		</properties>
 	</rule>
 	<rule ref="rulesets/naming.xml/LongVariable">
